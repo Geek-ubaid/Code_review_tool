@@ -45,10 +45,32 @@ class main_window(QtWidgets.QMainWindow,Ui_MainWindow):
         else:
             pass
 
+
+    def linting(self):
+        import platform
+        import os
+        if platform.system() == "Windows":
+            print(self.file_name)
+            try:
+                os.system('pylint ' + self.file_name.split('/')[-1])
+            except :
+                print("Command Not found")
+
     def get_analysis(self):
 
-        if platform.system() == 'Windows':
-            print(os.system('pycodestyle --statistics -qq ' + self.file_name))
+        import coverage
+
+        cov = coverage.Coverage()
+        cov.start()
+
+        import test
+
+        cov.stop()
+        cov.save()
+
+        cov.html_report()
+
+        self.linting()
 
 
     def saveFile(self):
